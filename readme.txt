@@ -1,0 +1,57 @@
+=== RW Distributed Profile Client ===
+Contributors: f.staude
+Tags:
+Requires at least: 4.0
+Tested up to: 4.2.2
+Stable tag: 0.1
+License: GPLv3 or later
+License URI: http://www.gnu.org/licenses/gpl-3.0.html
+
+
+
+== Description ==
+
+
+== Hooks ==
+
+= Filter =
+
+rw_distributed_profile_client_translationpath
+
+
+= Actions =
+
+rw_distributed_profile_client_init
+
+rw_distributed_profile_client_autoload_register
+
+rw_distributed_profile_client_autoload_unregister
+
+== Defines ==
+
+
+
+== Installation ==
+
+
+== Frequently Asked Questions ==
+
+= Question =
+
+Answer
+
+
+== Screenshots ==
+
+
+== Changelog ==
+
+= 0.1 =
+* First version published
+
+
+== Credits ==
+
+
+
+
