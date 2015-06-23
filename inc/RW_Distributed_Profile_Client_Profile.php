@@ -3,6 +3,14 @@
 
 class RW_Distributed_Profile_Client_Profile {
 
+    /**
+     * get profile list from remote server
+     *
+     * @since   0.1
+     * @access  public
+     * @static
+     * @return null
+     */
     public static function get_profile_list() {
         $request = array(   'cmd' => 'list_profile' );
         $json = urlencode( json_encode( $request ) );
@@ -15,6 +23,16 @@ class RW_Distributed_Profile_Client_Profile {
         return $json->message;
     }
 
+    /**
+     * Copy Profildata on first login
+     *
+     * @since   0.1
+     * @access  public
+     * @static
+     * @param   $user_login
+     * @param   $user
+     * @return  null
+     */
     public static function copy_profile( $user_login, $user ) {
         $first_run = get_user_option( 'rw_distributed_profile_client_copy', $user->ID );
         if ( $first_run != true ) {
@@ -28,16 +46,17 @@ class RW_Distributed_Profile_Client_Profile {
                 return null;
             }
             foreach( $json->message->wordpress as $key => $value ) {
-
-                xprofile_set_field_data( $key, $user->ID, $value  );
+                update_user_meta( $user->ID, $key,$value );
             }
             foreach( $json->message->buddypress as $group ) {
                 foreach( $group as $key => $value ) {
-                    // @todo spezialbehandling Datumfelder. Am besten, Filter nach Feldtyp triggern für zukünfige Erweiterungen
-                     xprofile_set_field_data( $key, $user->ID, maybe_unserialize( $value->value  ));
+                    $field = new BP_XProfile_Field( xprofile_get_field_id_from_name( $key ) );
+                    $fieldvalue = apply_filters( 'rw_distributed_profile_client_field_value', $value->value );
+                    $fieldvalue = apply_filters( 'rw_distributed_profile_client_field_'. $field->type . '_value', $fieldvalue );
+                    xprofile_set_field_data( $key, $user->ID, maybe_unserialize( $fieldvalue ) );
                 }
             }
         }
-        exit;
     }
+
 }

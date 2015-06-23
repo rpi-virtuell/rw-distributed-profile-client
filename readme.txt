@@ -18,6 +18,9 @@ License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
 rw_distributed_profile_client_translationpath
 
+rw_distributed_profile_client_field_value
+
+rw_distributed_profile_client_field_FIELDTYP_value
 
 = Actions =
 
