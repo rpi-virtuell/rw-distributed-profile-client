@@ -11,20 +11,26 @@ class RW_Distributed_Profile_Client_Profile {
      * @static
      * @return null
      */
-    public static function get_profile_list() {
+    public static function get_profile_list( $refresh = false ) {
         if ( RW_Distributed_Profile_Client_Options::get_endpoint() == '' ) {
             return false;
         }
-        $request = array(   'cmd' => 'list_profile' );
-        $json = urlencode( json_encode( $request ) );
-        $response = wp_remote_get( RW_Distributed_Profile_Client_Options::get_endpoint() . $json , array ( 'sslverify' => false ) );
+	    $cache = get_option( 'rw_distributed_profile_client_fieldlist' , false );
+	    if ( $cache === false ) {
+		    $request = array(   'cmd' => 'list_profile' );
+		    $json = urlencode( json_encode( $request ) );
+		    $response = wp_remote_get( RW_Distributed_Profile_Client_Options::get_endpoint() . $json , array ( 'sslverify' => false ) );
 
-        try {
-            $json = json_decode( $response['body'] );
-        } catch ( Exception $ex ) {
-            return null;
-        }
-        return $json->message;
+		    try {
+			    $json = json_decode( $response['body'] );
+		    } catch ( Exception $ex ) {
+			    return null;
+		    }
+		    update_option( 'rw_distributed_profile_client_fieldlist', $json->message );
+		    return $json->message;
+	    } else {
+		    return $cache;
+	    }
     }
 
     /**

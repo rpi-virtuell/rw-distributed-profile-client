@@ -5,12 +5,12 @@
  * Plugin URI:       https://github.com/rpi-virtuell/rw_distributed_profile_client
  * Description:      Allow to copy profile data between systems
  * Author:           Frank Staude
- * Version:          0.1
+ * Version:          0.1.1
  * Licence:          GPLv3
  * Author URI:       http://staude.net
  * Text Domain:      rw_distributed_profile_client
  * Domain Path:      /languages
- * Last Change:      16.06.2015 13:20
+ * Last Change:      25.06.2015 13:20
  */
 
 class RW_Distributed_Profile_Client {
@@ -21,7 +21,7 @@ class RW_Distributed_Profile_Client {
      * @since   0.1
      * @access  public
      */
-    static public $version = "0.1";
+    static public $version = "0.1.1";
 
     /**
      * Singleton object holder
@@ -102,13 +102,12 @@ class RW_Distributed_Profile_Client {
 
         //@todo nur wenn  settingsseite aufgerufen
         add_action( 'admin_init',       array( 'RW_Distributed_Profile_Client_Options', 'register_settings' ) );
-
-
         add_action( 'admin_menu',       array( 'RW_Distributed_Profile_Client_Options', 'options_menu' ) );
-        add_filter( 'plugin_action_links_' . self::$plugin_base_name, array( 'RW_Distributed_Profile_Client_Options', 'plugin_settings_link') );
-
         add_action( 'wp_login',         array( 'RW_Distributed_Profile_Client_Profile', 'copy_profile' ), 10, 2 );
-        do_action( 'rw_distributed_profile_client_init' );
+
+	    add_filter( 'plugin_action_links_' . self::$plugin_base_name, array( 'RW_Distributed_Profile_Client_Options', 'plugin_settings_link') );
+
+	    do_action( 'rw_distributed_profile_client_init' );
     }
 
     /**

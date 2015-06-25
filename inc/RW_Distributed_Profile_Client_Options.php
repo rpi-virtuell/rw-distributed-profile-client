@@ -144,7 +144,7 @@ class RW_Distributed_Profile_Client_Options {
         }
         $creategroupe = false;
         $remote_profiles = RW_Distributed_Profile_Client_Profile::get_profile_list();
-        if (    ( isset ( $_REQUEST['settings-updated'] ) &&  $_REQUEST['settings-updated'] == 'true' ) && function_exists( 'bp_xprofile_get_groups' ) && is_object( $remote_profiles)  && is_object( $remote_profiles->buddypress ) ) {
+        if ( ( isset ( $_REQUEST['settings-updated'] ) &&  $_REQUEST['settings-updated'] == 'true' ) && function_exists( 'bp_xprofile_get_groups' ) && is_object( $remote_profiles)  && is_object( $remote_profiles->buddypress ) ) {
             $local_groups = bp_xprofile_get_groups( array (
                 'fetch_fields'  => false,
                 'fetch_visibility_level' => true,
