@@ -23,22 +23,7 @@ class RW_Distributed_Profile_Client_Options {
     static public function register_settings() {
         register_setting( 'rw_distributed_profile_client_options', 'rw_distributed_profile_client_options_endpoint_url' );
         register_setting( 'rw_distributed_profile_client_options', 'rw_distributed_profile_client_options_enable_remote_update' );
-
-        // Settings for profile fields
-        $remote_profiles = RW_Distributed_Profile_Client_Profile::get_profile_list();
-        if ( is_object( $remote_profiles)  && is_object( $remote_profiles->wordpress ) ) {
-            foreach ( $remote_profiles->wordpress as $wpfields ) {
-                register_setting( 'rw_distributed_profile_client_options', 'rw_distributed_profile_client_options_wordpress_' . $wpfields );
-            }
-        }
-        if ( is_object( $remote_profiles)  && is_object( $remote_profiles->buddypress ) ) {
-            foreach ( $remote_profiles->buddypress as $bpgroup ) {
-                foreach ( $bpgroup->fields as $field ) {
-                    register_setting( 'rw_distributed_profile_client_options', 'rw_distributed_profile_client_options_bp_' . $bpgroup->name . '_' . $field->name );
-
-                }
-            }
-        }
+	    register_setting( 'rw_distributed_profile_client_options', 'rw_distributed_profile_client_options_active_fields' );
     }
 
     /**
@@ -144,6 +129,7 @@ class RW_Distributed_Profile_Client_Options {
         }
         $creategroupe = false;
         $remote_profiles = RW_Distributed_Profile_Client_Profile::get_profile_list();
+	    $active_profiles = get_option( 'rw_distributed_profile_client_options_active_fields' );
         if ( ( isset ( $_REQUEST['settings-updated'] ) &&  $_REQUEST['settings-updated'] == 'true' ) && function_exists( 'bp_xprofile_get_groups' ) && is_object( $remote_profiles)  && is_object( $remote_profiles->buddypress ) ) {
             $local_groups = bp_xprofile_get_groups( array (
                 'fetch_fields'  => false,
@@ -156,8 +142,7 @@ class RW_Distributed_Profile_Client_Options {
                     $creategroupe = $bpgroup;
                 }
                 foreach ( $bpgroup->fields as $field ) {
-                    $fieldname = 'rw_distributed_profile_client_options_bp_' . $bpgroup->name . '_' . $field->name;
-                    if ( get_option( $fieldname ) == 1 ) {
+                    if ( isset( $active_profiles[ $bpgroup->name . '_' . $field->name ] ) &&  $active_profiles[ $bpgroup->name . '_' . $field->name ] == 1 ) {
                         if ( self::bp_profile_field_exists( $field->name) === false ) {
                             if ( $creategroupe !== false ) {
                                 $groupid = xprofile_insert_field_group(
@@ -255,10 +240,10 @@ class RW_Distributed_Profile_Client_Options {
                             _e( 'WordPress fields', RW_Distributed_Profile_Client::get_textdomain() );
                             echo "</h3>";
                             foreach ( $remote_profiles->wordpress as $wpfields ) {
-                                $fieldname = 'rw_distributed_profile_client_options_wordpress_' . $wpfields;
+                                $fieldname = 'rw_distributed_profile_client_options_active_fields[' . $wpfields . ']';
                                 ?>
                                 <label for="<?php echo $fieldname; ?>">
-                                    <input id="<?php echo $fieldname; ?>" type="checkbox" value="1" <?php if ( get_option( $fieldname )  == 1 ) echo " checked "; ?>   name="<?php echo $fieldname; ?>">
+                                    <input id="<?php echo $fieldname; ?>" type="checkbox" value="1" <?php if ( isset( $active_profiles[ $wpfields  ] ) &&  $active_profiles[ $wpfields] == 1 ) echo " checked "; ?>   name="<?php echo $fieldname; ?>">
                                     <?php echo $wpfields . "<br/>"?></label>
                                 <?php
                             }
@@ -272,10 +257,10 @@ class RW_Distributed_Profile_Client_Options {
                                 echo $bpgroup->name;
                                 echo "</h4>";
                                 foreach ( $bpgroup->fields as $field ) {
-                                    $fieldname = 'rw_distributed_profile_client_options_bp_' . $bpgroup->name . '_' . $field->name;
+                                    $fieldname = 'rw_distributed_profile_client_options_active_fields[' . $bpgroup->name . '_' . $field->name . ']';
                                     ?>
                                     <label for="<?php echo $fieldname; ?>">
-                                        <input id="<?php echo $fieldname; ?>" type="checkbox" value="1" <?php if ( get_option( $fieldname )  == 1 ) echo " checked "; ?>   name="<?php echo $fieldname; ?>">
+                                        <input id="<?php echo $fieldname; ?>" type="checkbox" value="1" <?php if ( isset( $active_profiles[ $bpgroup->name . '_' . $field->name ] ) &&  $active_profiles[ $bpgroup->name . '_' . $field->name ] == 1 ) echo " checked "; ?>   name="<?php echo $fieldname; ?>">
                                         <?php echo $field->name . "<br/>"?></label>
                                     <?php
                                 }
@@ -293,4 +278,6 @@ class RW_Distributed_Profile_Client_Options {
         </div>
     <?php
     }
+
+
 }
