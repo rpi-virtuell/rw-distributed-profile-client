@@ -56,7 +56,15 @@ class RW_Distributed_Profile_Client_Profile {
                 return null;
             }
             foreach( $json->message->wordpress as $key => $value ) {
-                update_user_meta( $user->ID, $key,$value );
+	            if ( $key == 'user_nicename' ) {
+	                $user_id = wp_update_user( array( 'ID' => $user->ID, 'user_nicename' => $value ) );
+	            } elseif ( $key == 'user_email' ) {
+		            $user_id = wp_update_user( array( 'ID' => $user->ID, 'user_email' => $value ) );
+	            } elseif ( $key == 'user_url' ) {
+			            $user_id = wp_update_user( array( 'ID' => $user->ID, 'user_url' => $value ) );
+	            } else {
+		            update_user_meta( $user->ID, $key,$value );
+	            }
             }
             if ( function_exists( xprofile_get_field_id_from_name ) ) {
                 foreach( $json->message->buddypress as $group ) {
@@ -69,6 +77,7 @@ class RW_Distributed_Profile_Client_Profile {
                 }
             }
         }
+
     }
 
 }
