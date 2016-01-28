@@ -36,6 +36,8 @@ rw_distributed_profile_client_autoload_unregister
 
 == Installation ==
 
+  Settingpage:
+  endpoint: e.g. http://example.com/rw_profile/
 
 == Frequently Asked Questions ==
 
