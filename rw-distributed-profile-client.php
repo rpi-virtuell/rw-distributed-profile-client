@@ -5,14 +5,14 @@
  * Plugin URI:        https://github.com/rpi-virtuell/rw_distributed_profile_client
  * Description:       Allow to copy profile data between systems
  * Author:            Frank Staude
- * Version:           0.1.1
+ * Version:           0.1.2
  * Licence:           GPLv3
  * Author URI:        http://staude.net
  * Text Domain:       rw_distributed_profile_client
  * Domain Path:       /languages
  * GitHub Plugin URI: https://github.com/rpi-virtuell/rw-distributed-profile-client
  * GitHub Branch:     master
- * Last Change:       30.06.2015 14:02
+ * Last Change:       23.08.2016 12:41
  *
  */
 
@@ -24,7 +24,7 @@ class RW_Distributed_Profile_Client {
      * @since   0.1
      * @access  public
      */
-    static public $version = "0.1.1";
+    static public $version = "0.1.2";
 
     /**
      * Singleton object holder
