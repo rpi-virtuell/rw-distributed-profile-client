@@ -50,7 +50,7 @@ class RW_Distributed_Profile_Client_Options {
      * @return  string
      */
     static public function get_endpoint() {
-        return get_option( 'rw_distributed_profile_client_options_endpoint_url' );
+        return get_option( 'rw_distributed_profile_client_options_endpoint_url' , 'http://gruppen.rpi-virtuell.de/rw_profile/' );
     }
 
     /**
